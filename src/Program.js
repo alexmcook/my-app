@@ -30,14 +30,14 @@ function pair(a, b) {
   this.b = b;
 }
 
-function itemTiers(percentESTier, hybridESTier, flatESTier, blockTier) {
+function itemTiers(baseES, percentESTier, hybridESTier, flatESTier, blockTier, minES, maxES) {
+  this.baseES = baseES;
   this.percentESTier = percentESTier;
   this.hybridESTier = hybridESTier;
   this.flatESTier = flatESTier;
   this.blockTier = blockTier;
-  this.toString = function() {
-    return "P:" + percentESTier + " H:" + hybridESTier + " F:" + flatESTier + " B:" + blockTier;
-  };
+  this.minES = minES;
+  this.maxES = maxES;
 }
 
 function calcBlock(itemBlock, iLvl) {
@@ -91,8 +91,18 @@ function calcAll(item) {
   for (let i = 0; i < percentESTiers.length; i++) {
     for (let j = 0; j < hybridESTiers.length; j++) {
       if (hybridESTiers[j].a === percentESTiers[i].b) {
-        items.push(new itemTiers(percentESTiers[i].a, hybridESTiers[j].a,
-                                 flatESTiers[0], hybridESTiers[j].b));
+        items.push(new itemTiers(item.baseES,
+                                 percentESTiers[i].a,
+                                 hybridESTiers[j].a,
+                                 flatESTiers[0],
+                                 hybridESTiers[j].b,
+                                 Math.round(((percentES[percentESTiers[i].a].min +
+                                   hybridES[hybridESTiers[j].a].min +
+                                   120) / 100) * (parseInt(item.baseES, 10) + flatES[flatESTiers[0]].min)),
+                                 Math.round(((percentES[percentESTiers[i].a].max +
+                                   hybridES[hybridESTiers[j].a].max +
+                                   120) / 100) * (parseInt(item.baseES, 10) + flatES[flatESTiers[0]].max))
+                                 ));
       }
     }
   }
@@ -100,11 +110,13 @@ function calcAll(item) {
 }
 
 var testItem = {
+  baseES: null,
   percentES: null,
   flatES: null,
   percentBlock: null,
   iLvl: null,
-  setValues: function(percentES, flatES, percentBlock, iLvl) {
+  setValues: function(baseES, percentES, flatES, percentBlock, iLvl) {
+    this.baseES = baseES;
     this.percentES = percentES;
     this.flatES = flatES;
     this.percentBlock = percentBlock;
@@ -112,8 +124,8 @@ var testItem = {
   }
 }
 
-export function display(percentES, flatES, percentBlock, iLvl) {
-  testItem.setValues(percentES, flatES, percentBlock, iLvl);
+export function display(baseES, percentES, flatES, percentBlock, iLvl) {
+  testItem.setValues(baseES, percentES, flatES, percentBlock, iLvl);
   let items = [];
   if (testItem.percentES != null && testItem.flatES != null &&
       testItem.percentBlock != null && testItem.iLvl != null) {
