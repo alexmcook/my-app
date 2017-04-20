@@ -12,11 +12,11 @@
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-flexboxgrid": "^1.0.0",
-    "react-tap-event-plugin": "^2.0.1"
+    "react-tap-event-plugin": "^2.0.1",
+    "react-scripts": "0.9.5"
   },
   "devDependencies": {
     "nodemon": "^1.11.0",
-    "react-scripts": "0.9.5"
   },
   "scripts": {
     "start": "react-scripts start",
