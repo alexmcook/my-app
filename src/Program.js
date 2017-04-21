@@ -30,8 +30,7 @@ function pair(a, b) {
   this.b = b;
 }
 
-function itemTiers(baseES, percentESTier, hybridESTier, flatESTier, blockTier, minES, maxES) {
-  this.baseES = baseES;
+function itemTiers(percentESTier, hybridESTier, flatESTier, blockTier, minES, maxES) {
   this.percentESTier = percentESTier;
   this.hybridESTier = hybridESTier;
   this.flatESTier = flatESTier;
@@ -91,8 +90,7 @@ function calcAll(item) {
   for (let i = 0; i < percentESTiers.length; i++) {
     for (let j = 0; j < hybridESTiers.length; j++) {
       if (hybridESTiers[j].a === percentESTiers[i].b) {
-        items.push(new itemTiers(item.baseES,
-                                 percentESTiers[i].a,
+        items.push(new itemTiers(percentESTiers[i].a,
                                  hybridESTiers[j].a,
                                  flatESTiers[0],
                                  hybridESTiers[j].b,

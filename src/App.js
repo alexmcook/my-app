@@ -7,12 +7,54 @@ import injectTapEventPlugin from 'react-tap-event-plugin'; // Required for mater
 injectTapEventPlugin();                                    // Required for material-ui RaisedButton
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import TextField from 'material-ui/TextField';
+import AppBar from 'material-ui/AppBar';
+import IconButton from 'material-ui/IconButton';
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import Drawer from 'material-ui/Drawer';
+import MenuItem from 'material-ui/MenuItem';
 
 // other imports
 import * as Program from './Program.js';
 
 // css imports
 import './css/bootstrap.css';
+
+class Menu extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: false
+    };
+    this.handleClose = this.handleClose.bind(this);
+    this.handleToggle = this.handleToggle.bind(this);
+    this.setState = this.setState.bind(this);
+  }
+
+  handleToggle() {
+    this.setState({
+      open: !this.state.open
+    });
+  }
+
+  handleClose() {
+    this.setState({
+      open: false
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <AppBar title="App" onLeftIconButtonTouchTap={this.handleToggle} />
+        <Drawer docked={false} open={this.state.open} onRequestChange={(open) => this.setState({open})}>
+          <AppBar title="Bases" showMenuIconButton={false} iconElementRight={<IconButton><NavigationClose /></IconButton>} onRightIconButtonTouchTap={this.handleClose} />
+          <MenuItem onTouchTap={console.log(1)}>Item 1</MenuItem>
+          <MenuItem onTouchTap={console.log(2)}>Item 2</MenuItem>
+        </Drawer>
+      </div>
+    );
+  }
+}
 
 class ProgramInput extends React.Component {
   constructor(props) {
@@ -23,10 +65,10 @@ class ProgramInput extends React.Component {
       flatES: "",
       percentBlock: "",
       iLvl: ""
-    }
+    };
     this.setState = this.setState.bind(this);
     this.handleChange = this.handleChange.bind(this);
-  };
+  }
 
   handleChange(e) {
     this.props.onUpdate(
@@ -36,20 +78,22 @@ class ProgramInput extends React.Component {
       this.state.percentBlock,
       this.state.iLvl
     );
-  };
+  }
 
   render() {
     return (
       <div>
-        <TextField type="text" name="BaseES" value={this.state.baseES} onChange={(e) => this.setState({baseES: e.target.value})} floatingLabelText="Item Base ES" /><br />
-        <TextField type="text" name="PercentES" value={this.state.percentES} onChange={(e) => this.setState({percentES: e.target.value})} floatingLabelText="Percent ES" /><br />
-        <TextField type="text" name="FlatES" value={this.state.flatES} onChange={(e) => this.setState({flatES: e.target.value})} floatingLabelText="Flat ES" /><br />
-        <TextField type="text" name="PercentBlock" value={this.state.percentBlock} onChange={(e) => this.setState({percentBlock: e.target.value})} floatingLabelText="Percent Block" /><br />
-        <TextField type="text" name="ILvl" value={this.state.iLvl} onChange={(e) => this.setState({iLvl: e.target.value})} floatingLabelText="iLvl" /><br />
-        <RaisedButton label="Submit" type="submit" primary={true} onClick={this.handleChange} />
+        <TextField type="text" name="BaseES" value={this.state.baseES} onChange={(e) => this.setState({baseES: e.target.value})} floatingLabelText="Item Base ES" />
+        <TextField type="text" name="PercentES" value={this.state.percentES} onChange={(e) => this.setState({percentES: e.target.value})} floatingLabelText="Percent ES" />
+        <TextField type="text" name="FlatES" value={this.state.flatES} onChange={(e) => this.setState({flatES: e.target.value})} floatingLabelText="Flat ES" />
+        <TextField type="text" name="PercentBlock" value={this.state.percentBlock} onChange={(e) => this.setState({percentBlock: e.target.value})} floatingLabelText="Percent Block" />
+        <TextField type="text" name="ILvl" value={this.state.iLvl} onChange={(e) => this.setState({iLvl: e.target.value})} floatingLabelText="iLvl" />
+        <br />
+        <br />
+        <RaisedButton label="Submit" type="submit" primary={true} onTouchTap={this.handleChange} />
       </div>
     );
-  };
+  }
 }
 
 class ProgramOutput extends React.Component {
@@ -83,7 +127,7 @@ class ProgramOutput extends React.Component {
         </TableBody>
       </Table>
     );
-  };
+  }
 }
 
 class Wrapper extends React.Component {
@@ -98,7 +142,7 @@ class Wrapper extends React.Component {
     };
     this.onUpdate = this.onUpdate.bind(this);
     this.setState = this.setState.bind(this);
-  };
+  }
 
   onUpdate(baseES, percentES, flatES, percentBlock, iLvl) {
     this.setState({
@@ -108,7 +152,7 @@ class Wrapper extends React.Component {
       percentBlock: percentBlock,
       iLvl: iLvl
     });
-  };
+  }
 
   render() {
     return (
@@ -121,15 +165,18 @@ class Wrapper extends React.Component {
         </div>
       </div>
     );
-  };
+  }
 }
 
 class App extends React.Component {
   render() {
     return (
-      <Wrapper />
+      <div>
+        <Menu />
+        <Wrapper />
+      </div>
     );
-  };
+  }
 }
 
 export default App;
